@@ -13,8 +13,13 @@ class GradientText extends StatelessWidget {
   Widget build(BuildContext context) {
     return ShaderMask(
       shaderCallback: (bounds) {
-        return const LinearGradient(colors: [Colors.green, Colors.red])
-            .createShader(
+        return const LinearGradient(
+          colors: [
+            Colors.green,
+            Colors.orange,
+            Colors.red,
+          ],
+        ).createShader(
           Rect.fromLTRB(
             bounds.left,
             bounds.top,
