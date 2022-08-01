@@ -1,5 +1,7 @@
 import 'package:bazarapp/core/components/gradient_text.dart';
 import 'package:bazarapp/core/components/size_config.dart';
+import 'package:bazarapp/core/widgets/product_widget.dart';
+import 'package:bazarapp/core/widgets/row_see_all.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatelessWidget {
@@ -10,20 +12,48 @@ class HomePage extends StatelessWidget {
     SizeConfig.init(context);
     return Scaffold(
       body: SafeArea(
-        child: Column(
-          children: [
-            appNameSearchContainer(context),
-            SizedBox(
-              height: getConfigHeight(30),
-            ),
-            chooseCategoryContainer(context),
-            Expanded(
-              child: Container(
-                width: MediaQuery.of(context).size.width,
-                color: Colors.green,
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              appNameSearchContainer(context),
+              SizedBox(
+                height: getConfigHeight(30),
               ),
-            ),
-          ],
+              chooseCategoryContainer(context),
+              Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: getConfigWidth(20),
+                ),
+                child: SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  height: getConfigHeight(371),
+                  child: Column(
+                    children: [
+                      RowSeeAllWidget(title: "Best selling"),
+                      SizedBox(
+                        height: getConfigHeight(16),
+                      ),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width,
+                        height: getConfigHeight(242),
+                        child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: 10,
+                            itemBuilder: (context, index) {
+                              return Padding(
+                                padding: EdgeInsets.only(
+                                  right: getConfigWidth(12),
+                                ),
+                                child: const ProductWidget(),
+                              );
+                            }),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -37,22 +67,7 @@ class HomePage extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text(
-                "Choose category",
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              TextButton(
-                onPressed: () {},
-                child: const Text(
-                  "See all",
-                  style: TextStyle(color: Colors.grey),
-                ),
-              ),
-            ],
-          ),
+          RowSeeAllWidget(title: "Choose category"),
           SizedBox(
             height: getConfigHeight(134),
             width: double.infinity,
