@@ -13,15 +13,15 @@ class RowSeeAllWidget extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        const Text(
-          "Best selling",
-          style: TextStyle(fontWeight: FontWeight.bold),
+         Text(
+          title!,
+          style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         TextButton(
           onPressed: () {},
-          child: Text(
-            title!,
-            style: const TextStyle(
+          child: const Text(
+            "See all",
+            style: TextStyle(
               color: Colors.grey,
               fontSize: 12,
             ),
