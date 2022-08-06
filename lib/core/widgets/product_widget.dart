@@ -9,6 +9,7 @@ class ProductWidget extends StatelessWidget {
     SizeConfig.init(context);
     return Container(
       width: getConfigWidth(196),
+      height: getConfigHeight(242),
       decoration: BoxDecoration(
         color: Colors.red.withOpacity(0.15),
         borderRadius: BorderRadius.circular(20),
