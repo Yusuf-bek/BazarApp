@@ -1,6 +1,6 @@
 import 'package:bazarapp/core/components/gradient_text.dart';
 import 'package:bazarapp/core/components/size_config.dart';
-import 'package:bazarapp/core/widgets/product_widget.dart';
+import 'package:bazarapp/core/widgets/category_widget.dart';
 import 'package:bazarapp/core/widgets/row_see_all.dart';
 import 'package:flutter/material.dart';
 
@@ -20,38 +20,6 @@ class HomePage extends StatelessWidget {
                 height: getConfigHeight(30),
               ),
               chooseCategoryContainer(context),
-              Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: getConfigWidth(20),
-                ),
-                child: SizedBox(
-                  width: MediaQuery.of(context).size.width,
-                  height: getConfigHeight(371),
-                  child: Column(
-                    children: [
-                      RowSeeAllWidget(title: "Best selling"),
-                      SizedBox(
-                        height: getConfigHeight(16),
-                      ),
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width,
-                        height: getConfigHeight(242),
-                        child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: 10,
-                            itemBuilder: (context, index) {
-                              return Padding(
-                                padding: EdgeInsets.only(
-                                  right: getConfigWidth(12),
-                                ),
-                                child: const ProductWidget(),
-                              );
-                            }),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
             ],
           ),
         ),
@@ -63,49 +31,24 @@ class HomePage extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.all(20),
       width: MediaQuery.of(context).size.width,
-      height: getConfigHeight(215),
+      height: getConfigHeight(550),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           RowSeeAllWidget(title: "Choose category"),
           SizedBox(
-            height: getConfigHeight(134),
+            height: getConfigHeight(500),
             width: double.infinity,
-            child: ListView.builder(
+            child: GridView.builder(
               itemCount: 10,
-              scrollDirection: Axis.horizontal,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                crossAxisSpacing: 10,
+                mainAxisSpacing: 10,
+                mainAxisExtent: 250,
+              ),
               itemBuilder: (context, index) {
-                return Padding(
-                  padding: const EdgeInsets.only(right: 20),
-                  child: Container(
-                    width: getConfigWidth(123),
-                    height: getConfigHeight(134),
-                    decoration: BoxDecoration(
-                      color: Colors.redAccent.withOpacity(0.4),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(20),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            width: getConfigWidth(90),
-                            height: getConfigHeight(70),
-                            color: Colors.green,
-                          ),
-                          const Text(
-                            "name",
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                );
+                return const CategoryWidget();
               },
             ),
           ),
