@@ -1,4 +1,5 @@
 import 'package:bazarapp/core/components/size_config.dart';
+import 'package:bazarapp/views/main_page.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
@@ -139,7 +140,10 @@ class _LoginPageState extends State<LoginPage> {
                               ],
                             ),
                           ),
-                          loginButton(context, onTap: () {}),
+                          loginButton(context, onTap: () {
+                            Navigator.of(context)
+                                .pushReplacementNamed("main-page");
+                          }),
                         ],
                       ),
                     ),
