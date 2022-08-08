@@ -1,7 +1,6 @@
+import 'package:bazarapp/core/components/gradient_text.dart';
 import 'package:flutter/material.dart';
 
-import '../core/components/gradient_text.dart';
-import '../core/components/size_config.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
@@ -30,7 +29,7 @@ class _MainPageState extends State<MainPage> {
               child: GradientText(
                 text: "BazarApp",
                 textStyle:
-                const TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+                    const TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
               ),
             ),
             Container(
@@ -38,8 +37,9 @@ class _MainPageState extends State<MainPage> {
               decoration: const BoxDecoration(
                 color: Colors.white70,
                 borderRadius: BorderRadius.only(
-                    topRight: Radius.circular(40),
-                    topLeft: Radius.circular(40)),
+                  topRight: Radius.circular(40),
+                  topLeft: Radius.circular(40),
+                ),
               ),
               child: Column(
                 children: [
@@ -49,10 +49,18 @@ class _MainPageState extends State<MainPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        _Grid_View("report-page", const Color(0xFFC7B6F9),
-                            "assets/report.png", "Hisobotlar"),
-                        _Grid_View("", const Color(0xFFFFDAEB),
-                            "assets/pay.png", "To'lovlar"),
+                        _Grid_View(
+                          url: "report-page",
+                          color: const Color(0xFFC7B6F9),
+                          imgUrl: "assets/report.png",
+                          title: "Hisobotlar",
+                        ),
+                        _Grid_View(
+                          url: "",
+                          color: const Color(0xFFFFDAEB),
+                          imgUrl: "assets/pay.png",
+                          title: "To'lovlar",
+                        ),
                       ],
                     ),
                   ),
@@ -62,10 +70,18 @@ class _MainPageState extends State<MainPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        _Grid_View("", const Color(0xFFFDF1A9),
-                            "assets/shop.png", "Mahsulotlar"),
-                        _Grid_View("", const Color(0xFFDAF7FF),
-                            "assets/report.png", "Sozlamalar"),
+                        _Grid_View(
+                          url: "",
+                          color: const Color(0xFFFDF1A9),
+                          imgUrl: "assets/shop.png",
+                          title: "Mahsulotlar",
+                        ),
+                        _Grid_View(
+                          url: "",
+                          color: const Color(0xFFDAF7FF),
+                          imgUrl: "assets/report.png",
+                          title: "Sozlamalar",
+                        ),
                       ],
                     ),
                   )
@@ -78,17 +94,21 @@ class _MainPageState extends State<MainPage> {
     );
   }
 
-  Widget _Grid_View(String  url, Color color, String imgUrl, String title) {
-    return GestureDetector(
-      onTap: (){
-        if(url != ""){
+  InkWell _Grid_View({
+    required String url,
+    required Color color,
+    required String imgUrl,
+    required String title,
+  }) {
+    return InkWell(
+      onTap: () {
+        if (url != "") {
           Navigator.of(context).pushNamed(url);
         }
-
       },
       child: Container(
-        width: MediaQuery.of(context).size.width * 0.35,
-        height: 155,
+        width: MediaQuery.of(context).size.width * 0.38,
+        height: MediaQuery.of(context).size.height * 0.22,
         decoration: BoxDecoration(
           color: color,
           borderRadius: BorderRadius.circular(20),
