@@ -1,6 +1,13 @@
+import 'dart:convert';
+import 'dart:io';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:bazarapp/core/components/size_config.dart';
 import 'package:bazarapp/views/main_page.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../provider/auth.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -11,6 +18,45 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   bool _isNotVisible = true;
+  bool _isLoading = false;
+  String _username = "";
+  String _password = "";
+
+  void _login() async {
+    setState(() {
+      _isLoading = true;
+    });
+    final _prefs = await SharedPreferences.getInstance();
+    const url = 'http://cashapp.kamtar.uz/api/token/';
+    try {
+      final response = await http.post(
+        Uri.parse(url),
+        body: {"username": _username, "password": _password},
+      );
+      print(response.body);
+      var resBody = json.decode(response.body);
+      if (response.statusCode != 200) {
+        throw HttpException;
+      } else {
+        _prefs.setString("access", resBody["access"]);
+        _prefs.setString("refresh", resBody["refresh"]);
+        Navigator.of(context).pushReplacementNamed("main-page");
+      }
+    } catch (error) {
+      print(error);
+      rethrow;
+    }
+
+    // int status = await Provider.of<Auth>(ctn, listen: false)
+    //     .login(_username, _password);
+    // if (status == 0) {
+    //   Navigator.of(context).pushReplacementNamed("main-page");
+    // } else {}
+
+    setState(() {
+      _isLoading = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,14 +113,7 @@ class _LoginPageState extends State<LoginPage> {
                               children: [
                                 Row(
                                   children: [
-                                    const Text(
-                                      "@",
-                                      style: TextStyle(
-                                        color: Colors.grey,
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 18,
-                                      ),
-                                    ),
+                                    const Icon(Icons.account_circle_outlined,color: Colors.grey),
                                     const SizedBox(
                                       width: 15,
                                     ),
@@ -89,8 +128,10 @@ class _LoginPageState extends State<LoginPage> {
                                               fontWeight: FontWeight.w500,
                                             ),
                                           ),
-                                          keyboardType:
-                                              TextInputType.emailAddress,
+                                          keyboardType: TextInputType.name,
+                                          onChanged: (val) {
+                                            _username = val;
+                                          },
                                         ),
                                       ),
                                     ),
@@ -119,6 +160,9 @@ class _LoginPageState extends State<LoginPage> {
                                           keyboardType:
                                               TextInputType.visiblePassword,
                                           obscureText: _isNotVisible,
+                                          onChanged: (val) {
+                                            _password = val;
+                                          },
                                         ),
                                       ),
                                     ),
@@ -140,10 +184,13 @@ class _LoginPageState extends State<LoginPage> {
                               ],
                             ),
                           ),
-                          loginButton(context, onTap: () {
-                            Navigator.of(context)
-                                .pushReplacementNamed("main-page");
-                          }),
+                          _isLoading
+                              ? const Center(
+                                  child: CircularProgressIndicator(),
+                                )
+                              : loginButton(context, onTap: () {
+                                  _login();
+                                }),
                         ],
                       ),
                     ),

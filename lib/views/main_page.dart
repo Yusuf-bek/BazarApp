@@ -49,9 +49,9 @@ class _MainPageState extends State<MainPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        _Grid_View(150, const Color(0xFFC7B6F9),
+                        _Grid_View("report-page", const Color(0xFFC7B6F9),
                             "assets/report.png", "Hisobotlar"),
-                        _Grid_View(150, const Color(0xFFFFDAEB),
+                        _Grid_View("", const Color(0xFFFFDAEB),
                             "assets/pay.png", "To'lovlar"),
                       ],
                     ),
@@ -62,9 +62,9 @@ class _MainPageState extends State<MainPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        _Grid_View(150, const Color(0xFFFDF1A9),
+                        _Grid_View("", const Color(0xFFFDF1A9),
                             "assets/shop.png", "Mahsulotlar"),
-                        _Grid_View(150, const Color(0xFFDAF7FF),
+                        _Grid_View("", const Color(0xFFDAF7FF),
                             "assets/report.png", "Sozlamalar"),
                       ],
                     ),
@@ -78,34 +78,42 @@ class _MainPageState extends State<MainPage> {
     );
   }
 
-  Widget _Grid_View(double h, Color color, String imgUrl, String title) {
-    return Container(
-      width: MediaQuery.of(context).size.width * 0.35,
-      height: h,
-      decoration: BoxDecoration(
-        color: color,
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            SizedBox(
-              width: MediaQuery.of(context).size.width,
-              child: Image.asset(
-                imgUrl,
-                fit: BoxFit.fitHeight,
+  Widget _Grid_View(String  url, Color color, String imgUrl, String title) {
+    return GestureDetector(
+      onTap: (){
+        if(url != ""){
+          Navigator.of(context).pushNamed(url);
+        }
+
+      },
+      child: Container(
+        width: MediaQuery.of(context).size.width * 0.35,
+        height: 155,
+        decoration: BoxDecoration(
+          color: color,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SizedBox(
+                width: MediaQuery.of(context).size.width,
+                child: Image.asset(
+                  imgUrl,
+                  fit: BoxFit.fitHeight,
+                ),
               ),
-            ),
-            Text(
-              title,
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
+              Text(
+                title,
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
