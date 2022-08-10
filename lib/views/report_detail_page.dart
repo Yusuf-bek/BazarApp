@@ -17,6 +17,7 @@ class ReportDetailPage extends StatefulWidget {
 class _ReportDetailPageState extends State<ReportDetailPage> {
   double _mainHeight = 0.0;
   bool _isLoading = false;
+  double _totalAmount = 0.0;
   final oCcy = NumberFormat("#,##0.00", "en_US");
 
   late List<ReportDetailModel> _list = [];
@@ -32,8 +33,10 @@ class _ReportDetailPageState extends State<ReportDetailPage> {
       );
       Iterable list = jsonDecode(utf8.decode(response.bodyBytes));
       _list = list.map((model) => ReportDetailModel.fromJson(model)).toList();
-      if (response.statusCode == 200) {
-      } else {}
+
+      for (ReportDetailModel model in _list) {
+        _totalAmount = _totalAmount + model.summa;
+      }
     } catch (error) {
       rethrow;
     }
@@ -88,8 +91,22 @@ class _ReportDetailPageState extends State<ReportDetailPage> {
               ),
             ),
             SizedBox(
-              height: _mainHeight * 0.9,
-              width: MediaQuery.of(context).size.width * 0.85,
+              height: MediaQuery.of(context).size.height * 0.075,
+              width: MediaQuery.of(context).size.width * 0.9,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Jami:",
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  Text(oCcy.format(_totalAmount)),
+                ],
+              ),
+            ),
+            SizedBox(
+              height: _mainHeight * 0.82,
+              width: MediaQuery.of(context).size.width,
               child: _isLoading
                   ? const Center(
                       child: CircularProgressIndicator(),
@@ -98,39 +115,107 @@ class _ReportDetailPageState extends State<ReportDetailPage> {
                       ? const Center(
                           child: Text("Hich qanday hisobot yo'q"),
                         )
-                      : ListView.builder(
-                          itemCount: _list.length,
-                          shrinkWrap: true,
-                          itemBuilder: (ctn, index) {
-                            return Padding(
-                              padding: const EdgeInsets.only(
-                                  top: 15.0, bottom: 15.0),
-                              child: Container(
-                                height: 100,
-                                decoration: BoxDecoration(
-                                  color: Color(0xFFC7B6F9).withOpacity(0.15),
-                                  borderRadius: BorderRadius.circular(15),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    children: [
-                                      Text("Nomi: ${_list[index].nomi}"),
-                                      Text(
-                                          "Summasi: ${oCcy.format(_list[index].summa)}  ${_list[index].valyuta}"),
-                                      Text(
-                                          "Telefon raqami: ${_list[index].telefon}"),
-                                    ],
+                      : SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: SingleChildScrollView(
+                            scrollDirection: Axis.vertical,
+                            child: DataTable(
+                              sortAscending: true,
+                              columns: const <DataColumn>[
+                                DataColumn(
+                                  label: Text(
+                                    'Nomi',
+                                    style:
+                                        TextStyle(fontStyle: FontStyle.italic),
                                   ),
                                 ),
-                              ),
-                            );
-                          },
+                                DataColumn(
+                                  label: Text(
+                                    'Telefon',
+                                    style:
+                                        TextStyle(fontStyle: FontStyle.italic),
+                                  ),
+                                ),
+                                DataColumn(
+                                  numeric: true,
+                                  label: Text(
+                                    'Summa',
+                                    style:
+                                        TextStyle(fontStyle: FontStyle.italic),
+                                  ),
+                                ),
+                                DataColumn(
+                                  label: Text(
+                                    'Valyuta',
+                                    style:
+                                        TextStyle(fontStyle: FontStyle.italic),
+                                  ),
+                                ),
+                              ],
+                              rows: _list.map(
+                                ((element) {
+                                  return DataRow(
+                                    cells: <DataCell>[
+                                      DataCell(
+                                        Text(
+                                          element.nomi,
+                                        ),
+                                      ),
+                                      DataCell(
+                                        Text(
+                                          element.telefon,
+                                        ),
+                                      ),
+                                      DataCell(
+                                        Text(
+                                          oCcy.format(element.summa),
+                                        ),
+                                      ),
+                                      DataCell(
+                                        Text(
+                                          element.valyuta,
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                }),
+                              ).toList(),
+                            ),
+                          ),
                         ),
+              // : ListView.builder(
+              //     itemCount: _list.length,
+              //     shrinkWrap: true,
+              //     itemBuilder: (ctn, index) {
+              //       return Padding(
+              //         padding: const EdgeInsets.only(
+              //             top: 15.0, bottom: 15.0),
+              //         child: Container(
+              //           height: 100,
+              //           decoration: BoxDecoration(
+              //             color: Color(0xFFC7B6F9).withOpacity(0.15),
+              //             borderRadius: BorderRadius.circular(15),
+              //           ),
+              //           child: Padding(
+              //             padding: const EdgeInsets.all(8.0),
+              //             child: Column(
+              //               crossAxisAlignment:
+              //                   CrossAxisAlignment.start,
+              //               mainAxisAlignment:
+              //                   MainAxisAlignment.spaceEvenly,
+              //               children: [
+              //                 Text("Nomi: ${_list[index].nomi}"),
+              //                 Text(
+              //                     "Summasi: ${oCcy.format(_list[index].summa)}  ${_list[index].valyuta}"),
+              //                 Text(
+              //                     "Telefon raqami: ${_list[index].telefon}"),
+              //               ],
+              //             ),
+              //           ),
+              //         ),
+              //       );
+              //     },
+              //   ),
             ),
           ],
         ),
