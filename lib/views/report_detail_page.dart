@@ -4,6 +4,7 @@ import 'package:bazarapp/model/report_detail_model.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
+import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 class ReportDetailPage extends StatefulWidget {
   final String code;
@@ -19,8 +20,10 @@ class _ReportDetailPageState extends State<ReportDetailPage> {
   bool _isLoading = false;
   double _totalAmount = 0.0;
   final oCcy = NumberFormat("#,##0.00", "en_US");
+  String _searchValue = "";
 
   late List<ReportDetailModel> _list = [];
+  late List<ReportDetailModel> _listSearch = [];
 
   void _getReportType() async {
     setState(() {
@@ -33,17 +36,24 @@ class _ReportDetailPageState extends State<ReportDetailPage> {
       );
       Iterable list = jsonDecode(utf8.decode(response.bodyBytes));
       _list = list.map((model) => ReportDetailModel.fromJson(model)).toList();
-
+      // _listSearch = _list;
+      _listSearch.addAll(_list) ;
       for (ReportDetailModel model in _list) {
         _totalAmount = _totalAmount + model.summa;
       }
     } catch (error) {
       rethrow;
     }
-    setState(() {
-      _isLoading = false;
-    });
+    reportDataSource = ReportDataSource(reportData: _list);
+    if(mounted){
+      setState(() {
+        _isLoading = false;
+      });
+    }
+
   }
+
+  late ReportDataSource reportDataSource;
 
   @override
   void initState() {
@@ -56,170 +66,213 @@ class _ReportDetailPageState extends State<ReportDetailPage> {
     _mainHeight = MediaQuery.of(context).size.height -
         MediaQuery.of(context).viewPadding.top;
     return Scaffold(
-      body: SizedBox(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-        child: Column(
-          children: [
-            SizedBox(
-              height: MediaQuery.of(context).viewPadding.top,
-            ),
-            Container(
-              height: _mainHeight * 0.1,
-              alignment: Alignment.centerLeft,
-              child: Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 10.0),
-                    child: IconButton(
+      body: SingleChildScrollView(
+        child: SizedBox(
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          child: Column(
+            children: [
+              SizedBox(
+                height: MediaQuery.of(context).viewPadding.top,
+              ),
+              Container(
+                height: _mainHeight * 0.08,
+                alignment: Alignment.centerLeft,
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 10.0),
+                      child: IconButton(
                         onPressed: () {
                           Navigator.of(context).pop();
                         },
-                        icon: const Icon(Icons.arrow_back)),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(left: 20.0),
-                    child: Text(
-                      "${widget.code} kodli hisobot",
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
+                        icon: const Icon(Icons.arrow_back),
                       ),
                     ),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.075,
-              width: MediaQuery.of(context).size.width * 0.9,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Jami:",
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  Text(oCcy.format(_totalAmount)),
-                ],
-              ),
-            ),
-            SizedBox(
-              height: _mainHeight * 0.82,
-              width: MediaQuery.of(context).size.width,
-              child: _isLoading
-                  ? const Center(
-                      child: CircularProgressIndicator(),
-                    )
-                  : _list.isEmpty
-                      ? const Center(
-                          child: Text("Hich qanday hisobot yo'q"),
-                        )
-                      : SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: SingleChildScrollView(
-                            scrollDirection: Axis.vertical,
-                            child: DataTable(
-                              sortAscending: true,
-                              columns: const <DataColumn>[
-                                DataColumn(
-                                  label: Text(
-                                    'Nomi',
-                                    style:
-                                        TextStyle(fontStyle: FontStyle.italic),
-                                  ),
-                                ),
-                                DataColumn(
-                                  label: Text(
-                                    'Telefon',
-                                    style:
-                                        TextStyle(fontStyle: FontStyle.italic),
-                                  ),
-                                ),
-                                DataColumn(
-                                  numeric: true,
-                                  label: Text(
-                                    'Summa',
-                                    style:
-                                        TextStyle(fontStyle: FontStyle.italic),
-                                  ),
-                                ),
-                                DataColumn(
-                                  label: Text(
-                                    'Valyuta',
-                                    style:
-                                        TextStyle(fontStyle: FontStyle.italic),
-                                  ),
-                                ),
-                              ],
-                              rows: _list.map(
-                                ((element) {
-                                  return DataRow(
-                                    cells: <DataCell>[
-                                      DataCell(
-                                        Text(
-                                          element.nomi,
-                                        ),
-                                      ),
-                                      DataCell(
-                                        Text(
-                                          element.telefon,
-                                        ),
-                                      ),
-                                      DataCell(
-                                        Text(
-                                          oCcy.format(element.summa),
-                                        ),
-                                      ),
-                                      DataCell(
-                                        Text(
-                                          element.valyuta,
-                                        ),
-                                      ),
-                                    ],
-                                  );
-                                }),
-                              ).toList(),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 10.0),
+                      child: Container(
+                        width: MediaQuery.of(context).size.width * 0.8,
+                        height: _mainHeight * 0.06,
+                        decoration: BoxDecoration(
+                          color: Colors.grey.shade50,
+                          borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(7),
+                            topRight: Radius.circular(7),
+                            bottomLeft: Radius.circular(7),
+                            bottomRight: Radius.circular(7),
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.5),
+                              spreadRadius: 0.5,
+                              blurRadius: 0.5,
                             ),
+                          ],
+                          border: Border.all(
+                            color: Colors.grey,
+                            width: 2,
                           ),
                         ),
-              // : ListView.builder(
-              //     itemCount: _list.length,
-              //     shrinkWrap: true,
-              //     itemBuilder: (ctn, index) {
-              //       return Padding(
-              //         padding: const EdgeInsets.only(
-              //             top: 15.0, bottom: 15.0),
-              //         child: Container(
-              //           height: 100,
-              //           decoration: BoxDecoration(
-              //             color: Color(0xFFC7B6F9).withOpacity(0.15),
-              //             borderRadius: BorderRadius.circular(15),
-              //           ),
-              //           child: Padding(
-              //             padding: const EdgeInsets.all(8.0),
-              //             child: Column(
-              //               crossAxisAlignment:
-              //                   CrossAxisAlignment.start,
-              //               mainAxisAlignment:
-              //                   MainAxisAlignment.spaceEvenly,
-              //               children: [
-              //                 Text("Nomi: ${_list[index].nomi}"),
-              //                 Text(
-              //                     "Summasi: ${oCcy.format(_list[index].summa)}  ${_list[index].valyuta}"),
-              //                 Text(
-              //                     "Telefon raqami: ${_list[index].telefon}"),
-              //               ],
-              //             ),
-              //           ),
-              //         ),
-              //       );
-              //     },
-              //   ),
-            ),
-          ],
+                        child: Row(
+                          children: [
+                            Container(
+                              height: MediaQuery.of(context).size.height * 0.05,
+                              padding: const EdgeInsets.only(
+                                left: 10.0,
+                              ),
+                              width: MediaQuery.of(context).size.width * 0.63,
+                              child: Center(
+                                child: TextField(
+                                  style: TextStyle(
+                                    fontSize: 19.0,
+                                    color: Theme.of(context).hintColor,
+                                  ),
+                                  onChanged: (val){
+                                      setState(() {
+                                        _list.clear();
+                                        _list.addAll(_listSearch.where((element) => element.nomi.toLowerCase().contains(val.toLowerCase())));
+                                        reportDataSource = ReportDataSource(reportData: _list);
+                                      });
+                                    },
+                                  textAlign: TextAlign.start,
+                                  keyboardType: TextInputType.name,
+                                  decoration: const InputDecoration.collapsed(
+                                    hintText: "Nomini kiriting",
+                                    hintStyle: TextStyle(fontSize: 15),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: _mainHeight * 0.075,
+                width: MediaQuery.of(context).size.width * 0.9,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      "Jami:",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      oCcy.format(_totalAmount),
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: _mainHeight * 0.845,
+                width: MediaQuery.of(context).size.width,
+                child: _isLoading
+                    ? const Center(
+                        child: CircularProgressIndicator(),
+                      )
+                    : _list.isEmpty
+                        ? const Center(
+                            child: Text("Hich qanday hisobot yo'q"),
+                          )
+                        : SfDataGrid(
+                            source: reportDataSource,
+                            columnWidthMode: ColumnWidthMode.fill,
+                            columns: <GridColumn>[
+                              GridColumn(
+                                columnName: 'nomi',
+                                label: Container(
+                                  padding: const EdgeInsets.all(8.0),
+                                  alignment: Alignment.center,
+                                  child: const Text('Nomi'),
+                                ),
+                              ),
+                              GridColumn(
+                                columnName: 'summa',
+                                label: Container(
+                                  padding: EdgeInsets.all(8.0),
+                                  alignment: Alignment.center,
+                                  child: const Text(
+                                    'Summa',
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ),
+                              GridColumn(
+                                columnName: 'valyuta',
+                                label: Container(
+                                  padding: const EdgeInsets.all(8.0),
+                                  alignment: Alignment.center,
+                                  child: const Text('Valyuta'),
+                                ),
+                              ),
+                              GridColumn(
+                                columnName: 'telefon',
+                                label: Container(
+                                  padding: const EdgeInsets.all(8.0),
+                                  alignment: Alignment.center,
+                                  child: const Text('Telefon'),
+                                ),
+                              ),
+                            ],
+                          ),
+              ),
+            ],
+          ),
         ),
       ),
     );
+  }
+}
+
+class ReportDataSource extends DataGridSource {
+  final oCcy = NumberFormat("#,##0.00", "en_US");
+
+  ReportDataSource({required List<ReportDetailModel> reportData}) {
+    _reportData = reportData
+        .map<DataGridRow>(
+          (e) => DataGridRow(
+            cells: [
+              DataGridCell<String>(columnName: 'name', value: e.nomi),
+              DataGridCell<String>(
+                  columnName: 'summa', value: oCcy.format(e.summa)),
+              DataGridCell<String>(columnName: 'valyuta', value: e.valyuta),
+              DataGridCell<String>(columnName: 'telefon', value: e.telefon),
+            ],
+          ),
+        )
+        .toList();
+  }
+
+  List<DataGridRow> _reportData = [];
+
+  @override
+  List<DataGridRow> get rows => _reportData;
+
+  @override
+  DataGridRowAdapter? buildRow(DataGridRow row) {
+    return DataGridRowAdapter(
+        cells: row.getCells().map<Widget>((dataGridCell) {
+      Color getColor() {
+        if (dataGridCell.columnName == 'summa' ||
+            dataGridCell.columnName == 'telefon') {
+          return Colors.tealAccent.withOpacity(0.4);
+        }
+        return Colors.transparent;
+      }
+
+      return Container(
+        color: getColor(),
+        alignment: Alignment.centerLeft,
+        padding: const EdgeInsets.all(8.0),
+        child: Text(
+          dataGridCell.value.toString(),
+        ),
+      );
+    }).toList());
   }
 }
