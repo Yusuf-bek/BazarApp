@@ -10,7 +10,7 @@ class MainPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SizedBox(
-        height: MediaQuery.of(context).size.height,
+        height: context.height,
         child: Column(
           children: [
             SizedBox(

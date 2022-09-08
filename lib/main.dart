@@ -1,13 +1,26 @@
+import 'package:bazarapp/providers/hide_unhide_password_provider.dart';
 import 'package:bazarapp/views/login_page.dart';
 import 'package:bazarapp/views/main_page.dart';
 import 'package:bazarapp/views/report_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-  runApp(const MyApp());
+
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => HidePasswordProvider(),
+        ),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {

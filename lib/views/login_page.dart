@@ -1,13 +1,16 @@
 import 'package:bazarapp/core/components/my_styles.dart';
 import 'package:bazarapp/core/extensions/buildcontext_extension.dart';
 import 'package:bazarapp/core/components/size_config.dart';
+import 'package:bazarapp/providers/hide_unhide_password_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    print("re-drawed");
     SizeConfig.init(context);
     return Scaffold(
       backgroundColor: Colors.white,
@@ -52,14 +55,16 @@ class LoginPage extends StatelessWidget {
                           Container(
                             color: Colors.white,
                             width: double.infinity,
-                            height: context.height * 0.2,
+                            height: context.height * 0.15,
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Row(
                                   children: [
-                                    const Icon(Icons.account_circle_outlined,
-                                        color: Colors.grey),
+                                    const Icon(
+                                      Icons.account_circle_outlined,
+                                      color: Colors.grey,
+                                    ),
                                     const SizedBox(
                                       width: 15,
                                     ),
@@ -70,6 +75,11 @@ class LoginPage extends StatelessWidget {
                                             hintText: "login",
                                             hintStyle: LoginPageStyles
                                                 .instance.myHintTextStyle,
+                                            border: const OutlineInputBorder(
+                                              borderRadius: BorderRadius.all(
+                                                Radius.circular(14),
+                                              ),
+                                            ),
                                           ),
                                           keyboardType: TextInputType.name,
                                           onChanged: (val) {},
@@ -87,40 +97,53 @@ class LoginPage extends StatelessWidget {
                                     const SizedBox(
                                       width: 15,
                                     ),
-                                    Expanded(
-                                      child: SizedBox(
-                                        child: TextFormField(
-                                          decoration: InputDecoration(
-                                            hintText: "parol",
-                                            hintStyle: LoginPageStyles
-                                                .instance.myHintTextStyle,
+                                    Consumer<HidePasswordProvider>(builder:
+                                        (context, hidePasswordProvider, child) {
+                                      return Expanded(
+                                        child: SizedBox(
+                                          child: TextField(
+                                            decoration: InputDecoration(
+                                              suffixIcon: IconButton(
+                                                splashColor: Colors.transparent,
+                                                focusColor: Colors.transparent,
+                                                hoverColor: Colors.transparent,
+                                                highlightColor:
+                                                    Colors.transparent,
+                                                onPressed: () {
+                                                  hidePasswordProvider
+                                                      .changeVisibility();
+                                                },
+                                                icon: Icon(
+                                                  hidePasswordProvider.isVisible
+                                                      ? Icons.visibility
+                                                      : Icons.visibility_off,
+                                                  color: Colors.grey,
+                                                ),
+                                              ),
+                                              hintText: "parol",
+                                              hintStyle: LoginPageStyles
+                                                  .instance.myHintTextStyle,
+                                              border: const OutlineInputBorder(
+                                                borderRadius: BorderRadius.all(
+                                                  Radius.circular(14),
+                                                ),
+                                              ),
+                                            ),
+                                            keyboardType:
+                                                TextInputType.visiblePassword,
+                                            obscureText:
+                                                hidePasswordProvider.isVisible,
+                                            onChanged: (val) {},
                                           ),
-                                          keyboardType:
-                                              TextInputType.visiblePassword,
-                                          obscureText: false,
-                                          onChanged: (val) {},
                                         ),
-                                      ),
-                                    ),
-                                    IconButton(
-                                      onPressed: () {},
-                                      icon: const Icon(
-                                        1 == 1
-                                            ? Icons.visibility
-                                            : Icons.visibility_off,
-                                        color: Colors.grey,
-                                      ),
-                                    ),
+                                      );
+                                    })
                                   ],
                                 ),
                               ],
                             ),
                           ),
-                          2 == 2
-                              ? const Center(
-                                  child: CircularProgressIndicator(),
-                                )
-                              : loginButton(context, onTap: () {}),
+                          loginButton(context, onTap: () {}),
                         ],
                       ),
                     ),
