@@ -1,7 +1,5 @@
-import 'package:bazarapp/views/home_page.dart';
 import 'package:bazarapp/views/login_page.dart';
 import 'package:bazarapp/views/main_page.dart';
-import 'package:bazarapp/views/report_detail_page.dart';
 import 'package:bazarapp/views/report_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -25,8 +23,8 @@ class MyApp extends StatelessWidget {
       ),
       home: const LoginPage(),
       routes: {
-        "main-page": (BuildContext context) =>  const MainPage(),
-        "report-page": (BuildContext context) =>  const ReportPage(),
+        "main-page": (BuildContext context) => const MainPage(),
+        "report-page": (BuildContext context) => const ReportPage(),
       },
     );
   }

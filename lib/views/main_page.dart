@@ -1,6 +1,6 @@
 import 'package:bazarapp/core/components/gradient_text.dart';
+import 'package:bazarapp/core/components/my_styles.dart';
 import 'package:flutter/material.dart';
-
 
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
@@ -28,8 +28,7 @@ class _MainPageState extends State<MainPage> {
               height: _mainHeight * 0.3,
               child: GradientText(
                 text: "BazarApp",
-                textStyle:
-                    const TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+                textStyle: MainPageStyles.instance.appNameStyle,
               ),
             ),
             Container(
@@ -128,9 +127,7 @@ class _MainPageState extends State<MainPage> {
               ),
               Text(
                 title,
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                ),
+                style: MainPageStyles.instance.categoryTitleStyle,
               ),
             ],
           ),

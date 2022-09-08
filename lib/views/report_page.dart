@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:bazarapp/core/components/my_styles.dart';
 import 'package:bazarapp/views/report_detail_page.dart';
 import 'package:flutter/material.dart';
 import '../model/report_model.dart';
@@ -40,8 +41,8 @@ class _ReportPageState extends State<ReportPage> {
 
   @override
   void initState() {
-    super.initState();
     _getReportType();
+    super.initState();
   }
 
   @override
@@ -65,19 +66,17 @@ class _ReportPageState extends State<ReportPage> {
                   Padding(
                     padding: const EdgeInsets.only(left: 10.0),
                     child: IconButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        icon: const Icon(Icons.arrow_back)),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      icon: const Icon(Icons.arrow_back),
+                    ),
                   ),
-                  const Padding(
-                    padding: EdgeInsets.only(left: 20.0),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 20.0),
                     child: Text(
                       "Hisobot turlari",
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style: ReportPageStyles.instance.hisobotTurlariStyle,
                     ),
                   ),
                 ],

@@ -1,13 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:bazarapp/core/components/my_styles.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:bazarapp/core/components/size_config.dart';
-import 'package:bazarapp/views/main_page.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
-import '../provider/auth.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -94,13 +91,10 @@ class _LoginPageState extends State<LoginPage> {
                         children: [
                           Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
-                            children: const [
+                            children: [
                               Text(
                                 "Login",
-                                style: TextStyle(
-                                  fontSize: 27,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                                style: LoginPageStyles.instance.pageHeadlineStyle,
                               ),
                             ],
                           ),
@@ -113,20 +107,18 @@ class _LoginPageState extends State<LoginPage> {
                               children: [
                                 Row(
                                   children: [
-                                    const Icon(Icons.account_circle_outlined,color: Colors.grey),
+                                    const Icon(Icons.account_circle_outlined,
+                                        color: Colors.grey),
                                     const SizedBox(
                                       width: 15,
                                     ),
                                     Expanded(
                                       child: SizedBox(
                                         child: TextFormField(
-                                          decoration: const InputDecoration(
+                                          decoration: InputDecoration(
                                             hintText: "login",
-                                            hintStyle: TextStyle(
-                                              color: Colors.grey,
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w500,
-                                            ),
+                                            hintStyle: LoginPageStyles
+                                                .instance.myHintTextStyle,
                                           ),
                                           keyboardType: TextInputType.name,
                                           onChanged: (val) {
@@ -149,13 +141,10 @@ class _LoginPageState extends State<LoginPage> {
                                     Expanded(
                                       child: SizedBox(
                                         child: TextFormField(
-                                          decoration: const InputDecoration(
+                                          decoration: InputDecoration(
                                             hintText: "parol",
-                                            hintStyle: TextStyle(
-                                              color: Colors.grey,
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w500,
-                                            ),
+                                            hintStyle: LoginPageStyles
+                                                .instance.myHintTextStyle,
                                           ),
                                           keyboardType:
                                               TextInputType.visiblePassword,

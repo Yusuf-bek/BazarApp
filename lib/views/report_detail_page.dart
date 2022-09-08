@@ -37,7 +37,7 @@ class _ReportDetailPageState extends State<ReportDetailPage> {
       Iterable list = jsonDecode(utf8.decode(response.bodyBytes));
       _list = list.map((model) => ReportDetailModel.fromJson(model)).toList();
       // _listSearch = _list;
-      _listSearch.addAll(_list) ;
+      _listSearch.addAll(_list);
       for (ReportDetailModel model in _list) {
         _totalAmount = _totalAmount + model.summa;
       }
@@ -45,12 +45,11 @@ class _ReportDetailPageState extends State<ReportDetailPage> {
       rethrow;
     }
     reportDataSource = ReportDataSource(reportData: _list);
-    if(mounted){
+    if (mounted) {
       setState(() {
         _isLoading = false;
       });
     }
-
   }
 
   late ReportDataSource reportDataSource;
@@ -96,11 +95,8 @@ class _ReportDetailPageState extends State<ReportDetailPage> {
                         height: _mainHeight * 0.06,
                         decoration: BoxDecoration(
                           color: Colors.grey.shade50,
-                          borderRadius: const BorderRadius.only(
-                            topLeft: Radius.circular(7),
-                            topRight: Radius.circular(7),
-                            bottomLeft: Radius.circular(7),
-                            bottomRight: Radius.circular(7),
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(7),
                           ),
                           boxShadow: [
                             BoxShadow(
@@ -128,18 +124,24 @@ class _ReportDetailPageState extends State<ReportDetailPage> {
                                     fontSize: 19.0,
                                     color: Theme.of(context).hintColor,
                                   ),
-                                  onChanged: (val){
-                                      setState(() {
-                                        _list.clear();
-                                        _list.addAll(_listSearch.where((element) => element.nomi.toLowerCase().contains(val.toLowerCase())));
-                                        reportDataSource = ReportDataSource(reportData: _list);
-                                      });
-                                    },
+                                  onChanged: (val) {
+                                    setState(() {
+                                      _list.clear();
+                                      _list.addAll(_listSearch.where(
+                                          (element) => element.nomi
+                                              .toLowerCase()
+                                              .contains(val.toLowerCase())));
+                                      reportDataSource =
+                                          ReportDataSource(reportData: _list);
+                                    });
+                                  },
                                   textAlign: TextAlign.start,
                                   keyboardType: TextInputType.name,
                                   decoration: const InputDecoration.collapsed(
                                     hintText: "Nomini kiriting",
-                                    hintStyle: TextStyle(fontSize: 15),
+                                    hintStyle: TextStyle(
+                                      fontSize: 15,
+                                    ),
                                   ),
                                 ),
                               ),
@@ -159,11 +161,15 @@ class _ReportDetailPageState extends State<ReportDetailPage> {
                   children: [
                     const Text(
                       "Jami:",
-                      style: TextStyle(fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     Text(
                       oCcy.format(_totalAmount),
-                      style: TextStyle(fontSize: 16),
+                      style: const TextStyle(
+                        fontSize: 16,
+                      ),
                     ),
                   ],
                 ),
@@ -194,7 +200,7 @@ class _ReportDetailPageState extends State<ReportDetailPage> {
                               GridColumn(
                                 columnName: 'summa',
                                 label: Container(
-                                  padding: EdgeInsets.all(8.0),
+                                  padding: const EdgeInsets.all(8.0),
                                   alignment: Alignment.center,
                                   child: const Text(
                                     'Summa',
