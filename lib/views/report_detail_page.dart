@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:bazarapp/core/extensions/buildcontext_extension.dart';
 import 'package:bazarapp/model/report_detail_model.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -62,13 +63,12 @@ class _ReportDetailPageState extends State<ReportDetailPage> {
 
   @override
   Widget build(BuildContext context) {
-    _mainHeight = MediaQuery.of(context).size.height -
-        MediaQuery.of(context).viewPadding.top;
+    _mainHeight = context.height - MediaQuery.of(context).viewPadding.top;
     return Scaffold(
       body: SingleChildScrollView(
         child: SizedBox(
           height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
+          width: context.width,
           child: Column(
             children: [
               SizedBox(
@@ -91,7 +91,7 @@ class _ReportDetailPageState extends State<ReportDetailPage> {
                     Padding(
                       padding: const EdgeInsets.only(left: 10.0),
                       child: Container(
-                        width: MediaQuery.of(context).size.width * 0.8,
+                        width: context.width * 0.8,
                         height: _mainHeight * 0.06,
                         decoration: BoxDecoration(
                           color: Colors.grey.shade50,
@@ -113,11 +113,11 @@ class _ReportDetailPageState extends State<ReportDetailPage> {
                         child: Row(
                           children: [
                             Container(
-                              height: MediaQuery.of(context).size.height * 0.05,
+                              height: context.height * 0.05,
                               padding: const EdgeInsets.only(
                                 left: 10.0,
                               ),
-                              width: MediaQuery.of(context).size.width * 0.63,
+                              width: context.width * 0.63,
                               child: Center(
                                 child: TextField(
                                   style: TextStyle(
@@ -155,7 +155,7 @@ class _ReportDetailPageState extends State<ReportDetailPage> {
               ),
               SizedBox(
                 height: _mainHeight * 0.075,
-                width: MediaQuery.of(context).size.width * 0.9,
+                width: context.width * 0.9,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -176,7 +176,7 @@ class _ReportDetailPageState extends State<ReportDetailPage> {
               ),
               SizedBox(
                 height: _mainHeight * 0.845,
-                width: MediaQuery.of(context).size.width,
+                width: context.width,
                 child: _isLoading
                     ? const Center(
                         child: CircularProgressIndicator(),

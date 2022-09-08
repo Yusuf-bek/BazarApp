@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:bazarapp/core/components/my_styles.dart';
+import 'package:bazarapp/core/extensions/buildcontext_extension.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:bazarapp/core/components/size_config.dart';
@@ -30,7 +31,6 @@ class _LoginPageState extends State<LoginPage> {
         Uri.parse(url),
         body: {"username": _username, "password": _password},
       );
-      print(response.body);
       var resBody = json.decode(response.body);
       if (response.statusCode != 200) {
         throw HttpException;
@@ -40,7 +40,6 @@ class _LoginPageState extends State<LoginPage> {
         Navigator.of(context).pushReplacementNamed("main-page");
       }
     } catch (error) {
-      print(error);
       rethrow;
     }
 
@@ -62,14 +61,14 @@ class _LoginPageState extends State<LoginPage> {
       backgroundColor: Colors.white,
       body: SafeArea(
         child: SizedBox(
-          height: MediaQuery.of(context).size.height,
+          height: context.height,
           child: SingleChildScrollView(
             child: Column(
               children: [
                 SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.4,
+                  height: context.height * 0.4,
                   child: SizedBox(
-                    width: MediaQuery.of(context).size.width,
+                    width: context.width,
                     child: Image.asset(
                       "assets/login_page.gif",
                       fit: BoxFit.contain,
@@ -77,9 +76,9 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
                 SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.4,
+                  height: context.height * 0.4,
                   child: SizedBox(
-                    width: MediaQuery.of(context).size.width,
+                    width: context.width,
                     child: Padding(
                       padding: EdgeInsets.symmetric(
                         vertical: 10,
@@ -94,14 +93,15 @@ class _LoginPageState extends State<LoginPage> {
                             children: [
                               Text(
                                 "Login",
-                                style: LoginPageStyles.instance.pageHeadlineStyle,
+                                style:
+                                    LoginPageStyles.instance.pageHeadlineStyle,
                               ),
                             ],
                           ),
                           Container(
                             color: Colors.white,
                             width: double.infinity,
-                            height: MediaQuery.of(context).size.height * 0.16,
+                            height: context.height * 0.16,
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -186,9 +186,9 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
                 SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.1,
+                  height: context.height * 0.1,
                   child: SizedBox(
-                    width: MediaQuery.of(context).size.width,
+                    width: context.width,
                   ),
                 ),
               ],
@@ -203,8 +203,8 @@ class _LoginPageState extends State<LoginPage> {
     return InkWell(
       onTap: onTap,
       child: Container(
-        width: MediaQuery.of(context).size.width * 0.8,
-        height: MediaQuery.of(context).size.height * 0.07,
+        width: context.width * 0.8,
+        height: context.height * 0.07,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(15),
           color: Colors.blue,

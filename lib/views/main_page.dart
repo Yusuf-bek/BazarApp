@@ -1,5 +1,6 @@
 import 'package:bazarapp/core/components/gradient_text.dart';
 import 'package:bazarapp/core/components/my_styles.dart';
+import 'package:bazarapp/core/extensions/buildcontext_extension.dart';
 import 'package:flutter/material.dart';
 
 class MainPage extends StatefulWidget {
@@ -14,8 +15,7 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
-    _mainHeight = MediaQuery.of(context).size.height -
-        MediaQuery.of(context).viewPadding.top;
+    _mainHeight = context.height - MediaQuery.of(context).viewPadding.top;
     return Scaffold(
       body: SizedBox(
         height: MediaQuery.of(context).size.height,
@@ -106,8 +106,8 @@ class _MainPageState extends State<MainPage> {
         }
       },
       child: Container(
-        width: MediaQuery.of(context).size.width * 0.38,
-        height: MediaQuery.of(context).size.height * 0.22,
+        width: context.width * 0.38,
+        height: context.height * 0.22,
         decoration: BoxDecoration(
           color: color,
           borderRadius: BorderRadius.circular(20),
@@ -119,7 +119,7 @@ class _MainPageState extends State<MainPage> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               SizedBox(
-                width: MediaQuery.of(context).size.width,
+                width: context.width,
                 child: Image.asset(
                   imgUrl,
                   fit: BoxFit.fitHeight,

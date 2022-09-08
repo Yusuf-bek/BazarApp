@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:bazarapp/core/components/my_styles.dart';
+import 'package:bazarapp/core/extensions/buildcontext_extension.dart';
 import 'package:bazarapp/views/report_detail_page.dart';
 import 'package:flutter/material.dart';
 import '../model/report_model.dart';
@@ -47,12 +48,11 @@ class _ReportPageState extends State<ReportPage> {
 
   @override
   Widget build(BuildContext context) {
-    _mainHeight = MediaQuery.of(context).size.height -
-        MediaQuery.of(context).viewPadding.top;
+    _mainHeight = context.height - MediaQuery.of(context).viewPadding.top;
     return Scaffold(
       body: SizedBox(
         height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
+        width: context.width,
         child: Column(
           children: [
             SizedBox(
@@ -84,7 +84,7 @@ class _ReportPageState extends State<ReportPage> {
             ),
             SizedBox(
               height: _mainHeight * 0.9,
-              width: MediaQuery.of(context).size.width * 0.85,
+              width: context.width * 0.85,
               child: _isLoading
                   ? const Center(
                       child: CircularProgressIndicator(),
