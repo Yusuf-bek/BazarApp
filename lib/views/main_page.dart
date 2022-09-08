@@ -3,19 +3,11 @@ import 'package:bazarapp/core/components/my_styles.dart';
 import 'package:bazarapp/core/extensions/buildcontext_extension.dart';
 import 'package:flutter/material.dart';
 
-class MainPage extends StatefulWidget {
+class MainPage extends StatelessWidget {
   const MainPage({Key? key}) : super(key: key);
 
   @override
-  State<MainPage> createState() => _MainPageState();
-}
-
-class _MainPageState extends State<MainPage> {
-  double _mainHeight = 0.0;
-
-  @override
   Widget build(BuildContext context) {
-    _mainHeight = context.height - MediaQuery.of(context).viewPadding.top;
     return Scaffold(
       body: SizedBox(
         height: MediaQuery.of(context).size.height,
@@ -25,14 +17,14 @@ class _MainPageState extends State<MainPage> {
               height: MediaQuery.of(context).viewPadding.top,
             ),
             SizedBox(
-              height: _mainHeight * 0.3,
+              height: context.height * 0.3,
               child: GradientText(
                 text: "BazarApp",
                 textStyle: MainPageStyles.instance.appNameStyle,
               ),
             ),
             Container(
-              height: _mainHeight * 0.7,
+              height: context.height * 0.7,
               decoration: const BoxDecoration(
                 color: Colors.white70,
                 borderRadius: BorderRadius.only(
@@ -43,18 +35,20 @@ class _MainPageState extends State<MainPage> {
               child: Column(
                 children: [
                   SizedBox(
-                    height: _mainHeight * 0.3,
+                    height: context.height * 0.3,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         _Grid_View(
+                          context: context,
                           url: "report-page",
                           color: const Color(0xFFC7B6F9),
                           imgUrl: "assets/report.png",
                           title: "Hisobotlar",
                         ),
                         _Grid_View(
+                          context:  context,
                           url: "",
                           color: const Color(0xFFFFDAEB),
                           imgUrl: "assets/pay.png",
@@ -64,18 +58,20 @@ class _MainPageState extends State<MainPage> {
                     ),
                   ),
                   SizedBox(
-                    height: _mainHeight * 0.3,
+                    height: context.height * 0.3,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         _Grid_View(
+                          context:  context,
                           url: "",
                           color: const Color(0xFFFDF1A9),
                           imgUrl: "assets/shop.png",
                           title: "Mahsulotlar",
                         ),
                         _Grid_View(
+                          context: context,
                           url: "",
                           color: const Color(0xFFDAF7FF),
                           imgUrl: "assets/report.png",
@@ -98,6 +94,7 @@ class _MainPageState extends State<MainPage> {
     required Color color,
     required String imgUrl,
     required String title,
+    required BuildContext context
   }) {
     return InkWell(
       onTap: () {

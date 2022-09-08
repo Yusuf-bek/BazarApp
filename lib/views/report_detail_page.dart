@@ -4,16 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
-class ReportDetailPage extends StatefulWidget {
-  final String code;
+class ReportDetailPage extends StatelessWidget {
+  final String code = '';
 
-  const ReportDetailPage({Key? key, required this.code}) : super(key: key);
-
-  @override
-  State<ReportDetailPage> createState() => _ReportDetailPageState();
-}
-
-class _ReportDetailPageState extends State<ReportDetailPage> {
+  
   late ReportDataSource reportDataSource;
   @override
   Widget build(BuildContext context) {

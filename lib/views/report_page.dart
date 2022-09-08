@@ -1,23 +1,12 @@
 import 'package:bazarapp/core/components/my_styles.dart';
 import 'package:bazarapp/core/extensions/buildcontext_extension.dart';
-import 'package:bazarapp/views/report_detail_page.dart';
 import 'package:flutter/material.dart';
 
-
-class ReportPage extends StatefulWidget {
+class ReportPage extends StatelessWidget {
   const ReportPage({Key? key}) : super(key: key);
 
   @override
-  State<ReportPage> createState() => _ReportPageState();
-}
-
-class _ReportPageState extends State<ReportPage> {
-  double _mainHeight = 0.0;
-  bool _isLoading = false;
-
-  @override
   Widget build(BuildContext context) {
-    _mainHeight = context.height - MediaQuery.of(context).viewPadding.top;
     return Scaffold(
       body: SizedBox(
         height: MediaQuery.of(context).size.height,
@@ -28,7 +17,7 @@ class _ReportPageState extends State<ReportPage> {
               height: MediaQuery.of(context).viewPadding.top,
             ),
             Container(
-              height: _mainHeight * 0.1,
+              height: context.height * 0.1,
               alignment: Alignment.centerLeft,
               child: Row(
                 children: [
@@ -52,9 +41,9 @@ class _ReportPageState extends State<ReportPage> {
               ),
             ),
             SizedBox(
-              height: _mainHeight * 0.9,
+              height: context.height * 0.9,
               width: context.width * 0.85,
-              child: _isLoading
+              child: 2 == 2
                   ? const Center(
                       child: CircularProgressIndicator(),
                     )
@@ -70,15 +59,7 @@ class _ReportPageState extends State<ReportPage> {
                               padding: const EdgeInsets.only(
                                   top: 15.0, bottom: 15.0),
                               child: GestureDetector(
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => ReportDetailPage(
-                                          code: [][index].code),
-                                    ),
-                                  );
-                                },
+                                onTap: () {},
                                 child: Container(
                                   height: 80,
                                   decoration: BoxDecoration(
