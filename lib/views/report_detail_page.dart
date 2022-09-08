@@ -1,10 +1,7 @@
-import 'dart:convert';
-
 import 'package:bazarapp/core/extensions/buildcontext_extension.dart';
 import 'package:bazarapp/model/report_detail_model.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:http/http.dart' as http;
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 class ReportDetailPage extends StatefulWidget {
@@ -17,53 +14,9 @@ class ReportDetailPage extends StatefulWidget {
 }
 
 class _ReportDetailPageState extends State<ReportDetailPage> {
-  double _mainHeight = 0.0;
-  bool _isLoading = false;
-  double _totalAmount = 0.0;
-  final oCcy = NumberFormat("#,##0.00", "en_US");
-  String _searchValue = "";
-
-  late List<ReportDetailModel> _list = [];
-  late List<ReportDetailModel> _listSearch = [];
-
-  void _getReportType() async {
-    setState(() {
-      _isLoading = true;
-    });
-    String url = 'http://cashapp.kamtar.uz/api/101/reports/${widget.code}';
-    try {
-      final response = await http.get(
-        Uri.parse(url),
-      );
-      Iterable list = jsonDecode(utf8.decode(response.bodyBytes));
-      _list = list.map((model) => ReportDetailModel.fromJson(model)).toList();
-      // _listSearch = _list;
-      _listSearch.addAll(_list);
-      for (ReportDetailModel model in _list) {
-        _totalAmount = _totalAmount + model.summa;
-      }
-    } catch (error) {
-      rethrow;
-    }
-    reportDataSource = ReportDataSource(reportData: _list);
-    if (mounted) {
-      setState(() {
-        _isLoading = false;
-      });
-    }
-  }
-
   late ReportDataSource reportDataSource;
-
-  @override
-  void initState() {
-    super.initState();
-    _getReportType();
-  }
-
   @override
   Widget build(BuildContext context) {
-    _mainHeight = context.height - MediaQuery.of(context).viewPadding.top;
     return Scaffold(
       body: SingleChildScrollView(
         child: SizedBox(
@@ -75,7 +28,7 @@ class _ReportDetailPageState extends State<ReportDetailPage> {
                 height: MediaQuery.of(context).viewPadding.top,
               ),
               Container(
-                height: _mainHeight * 0.08,
+                height: context.height * 0.08,
                 alignment: Alignment.centerLeft,
                 child: Row(
                   children: [
@@ -92,7 +45,7 @@ class _ReportDetailPageState extends State<ReportDetailPage> {
                       padding: const EdgeInsets.only(left: 10.0),
                       child: Container(
                         width: context.width * 0.8,
-                        height: _mainHeight * 0.06,
+                        height: context.height * 0.06,
                         decoration: BoxDecoration(
                           color: Colors.grey.shade50,
                           borderRadius: const BorderRadius.all(
@@ -124,17 +77,7 @@ class _ReportDetailPageState extends State<ReportDetailPage> {
                                     fontSize: 19.0,
                                     color: Theme.of(context).hintColor,
                                   ),
-                                  onChanged: (val) {
-                                    setState(() {
-                                      _list.clear();
-                                      _list.addAll(_listSearch.where(
-                                          (element) => element.nomi
-                                              .toLowerCase()
-                                              .contains(val.toLowerCase())));
-                                      reportDataSource =
-                                          ReportDataSource(reportData: _list);
-                                    });
-                                  },
+                                  onChanged: (val) {},
                                   textAlign: TextAlign.start,
                                   keyboardType: TextInputType.name,
                                   decoration: const InputDecoration.collapsed(
@@ -154,7 +97,7 @@ class _ReportDetailPageState extends State<ReportDetailPage> {
                 ),
               ),
               SizedBox(
-                height: _mainHeight * 0.075,
+                height: context.height * 0.075,
                 width: context.width * 0.9,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -166,7 +109,7 @@ class _ReportDetailPageState extends State<ReportDetailPage> {
                       ),
                     ),
                     Text(
-                      oCcy.format(_totalAmount),
+                      NumberFormat("#,##0.00", "en_US").format(0.0),
                       style: const TextStyle(
                         fontSize: 16,
                       ),
@@ -175,13 +118,13 @@ class _ReportDetailPageState extends State<ReportDetailPage> {
                 ),
               ),
               SizedBox(
-                height: _mainHeight * 0.845,
+                height: context.height * 0.845,
                 width: context.width,
-                child: _isLoading
+                child: true == true
                     ? const Center(
                         child: CircularProgressIndicator(),
                       )
-                    : _list.isEmpty
+                    : [].isEmpty
                         ? const Center(
                             child: Text("Hich qanday hisobot yo'q"),
                           )

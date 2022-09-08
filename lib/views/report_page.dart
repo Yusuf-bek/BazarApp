@@ -1,10 +1,8 @@
-import 'dart:convert';
 import 'package:bazarapp/core/components/my_styles.dart';
 import 'package:bazarapp/core/extensions/buildcontext_extension.dart';
 import 'package:bazarapp/views/report_detail_page.dart';
 import 'package:flutter/material.dart';
-import '../model/report_model.dart';
-import 'package:http/http.dart' as http;
+
 
 class ReportPage extends StatefulWidget {
   const ReportPage({Key? key}) : super(key: key);
@@ -16,35 +14,6 @@ class ReportPage extends StatefulWidget {
 class _ReportPageState extends State<ReportPage> {
   double _mainHeight = 0.0;
   bool _isLoading = false;
-
-  late List<ReportModel> _list = [];
-
-  void _getReportType() async {
-    setState(() {
-      _isLoading = true;
-    });
-    const url = 'http://cashapp.kamtar.uz/api/101/reports';
-    try {
-      final response = await http.get(
-        Uri.parse(url),
-      );
-      Iterable list = json.decode(response.body);
-      _list = list.map((model) => ReportModel.fromJson(model)).toList();
-      if (response.statusCode == 200) {
-      } else {}
-    } catch (error) {
-      rethrow;
-    }
-    setState(() {
-      _isLoading = false;
-    });
-  }
-
-  @override
-  void initState() {
-    _getReportType();
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -89,12 +58,12 @@ class _ReportPageState extends State<ReportPage> {
                   ? const Center(
                       child: CircularProgressIndicator(),
                     )
-                  : _list.isEmpty
+                  : [].isEmpty
                       ? const Center(
                           child: Text("Hich qanday hisobot yo'q"),
                         )
                       : ListView.builder(
-                          itemCount: _list.length,
+                          itemCount: [].length,
                           shrinkWrap: true,
                           itemBuilder: (ctn, index) {
                             return Padding(
@@ -106,7 +75,7 @@ class _ReportPageState extends State<ReportPage> {
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) => ReportDetailPage(
-                                          code: _list[index].code),
+                                          code: [][index].code),
                                     ),
                                   );
                                 },
@@ -123,7 +92,7 @@ class _ReportPageState extends State<ReportPage> {
                                     borderRadius: BorderRadius.circular(15),
                                   ),
                                   child: Center(
-                                    child: Text(_list[index].title),
+                                    child: Text([][index].title),
                                   ),
                                 ),
                               ),

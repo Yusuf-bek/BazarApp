@@ -1,58 +1,10 @@
-import 'dart:convert';
-import 'dart:io';
 import 'package:bazarapp/core/components/my_styles.dart';
 import 'package:bazarapp/core/extensions/buildcontext_extension.dart';
-import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:bazarapp/core/components/size_config.dart';
 import 'package:flutter/material.dart';
 
-class LoginPage extends StatefulWidget {
+class LoginPage extends StatelessWidget {
   const LoginPage({Key? key}) : super(key: key);
-
-  @override
-  State<LoginPage> createState() => _LoginPageState();
-}
-
-class _LoginPageState extends State<LoginPage> {
-  bool _isNotVisible = true;
-  bool _isLoading = false;
-  String _username = "";
-  String _password = "";
-
-  void _login() async {
-    setState(() {
-      _isLoading = true;
-    });
-    final _prefs = await SharedPreferences.getInstance();
-    const url = 'http://cashapp.kamtar.uz/api/token/';
-    try {
-      final response = await http.post(
-        Uri.parse(url),
-        body: {"username": _username, "password": _password},
-      );
-      var resBody = json.decode(response.body);
-      if (response.statusCode != 200) {
-        throw HttpException;
-      } else {
-        _prefs.setString("access", resBody["access"]);
-        _prefs.setString("refresh", resBody["refresh"]);
-        Navigator.of(context).pushReplacementNamed("main-page");
-      }
-    } catch (error) {
-      rethrow;
-    }
-
-    // int status = await Provider.of<Auth>(ctn, listen: false)
-    //     .login(_username, _password);
-    // if (status == 0) {
-    //   Navigator.of(context).pushReplacementNamed("main-page");
-    // } else {}
-
-    setState(() {
-      _isLoading = false;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -85,7 +37,6 @@ class _LoginPageState extends State<LoginPage> {
                         horizontal: getConfigWidth(30),
                       ),
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Row(
@@ -101,7 +52,7 @@ class _LoginPageState extends State<LoginPage> {
                           Container(
                             color: Colors.white,
                             width: double.infinity,
-                            height: context.height * 0.16,
+                            height: context.height * 0.2,
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -121,9 +72,7 @@ class _LoginPageState extends State<LoginPage> {
                                                 .instance.myHintTextStyle,
                                           ),
                                           keyboardType: TextInputType.name,
-                                          onChanged: (val) {
-                                            _username = val;
-                                          },
+                                          onChanged: (val) {},
                                         ),
                                       ),
                                     ),
@@ -148,21 +97,15 @@ class _LoginPageState extends State<LoginPage> {
                                           ),
                                           keyboardType:
                                               TextInputType.visiblePassword,
-                                          obscureText: _isNotVisible,
-                                          onChanged: (val) {
-                                            _password = val;
-                                          },
+                                          obscureText: false,
+                                          onChanged: (val) {},
                                         ),
                                       ),
                                     ),
                                     IconButton(
-                                      onPressed: () {
-                                        setState(() {
-                                          _isNotVisible = !_isNotVisible;
-                                        });
-                                      },
-                                      icon: Icon(
-                                        _isNotVisible
+                                      onPressed: () {},
+                                      icon: const Icon(
+                                        1 == 1
                                             ? Icons.visibility
                                             : Icons.visibility_off,
                                         color: Colors.grey,
@@ -173,13 +116,11 @@ class _LoginPageState extends State<LoginPage> {
                               ],
                             ),
                           ),
-                          _isLoading
+                          2 == 2
                               ? const Center(
                                   child: CircularProgressIndicator(),
                                 )
-                              : loginButton(context, onTap: () {
-                                  _login();
-                                }),
+                              : loginButton(context, onTap: () {}),
                         ],
                       ),
                     ),
