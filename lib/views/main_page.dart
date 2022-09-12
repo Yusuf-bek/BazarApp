@@ -48,7 +48,7 @@ class MainPage extends StatelessWidget {
                           title: "Hisobotlar",
                         ),
                         _Grid_View(
-                          context:  context,
+                          context: context,
                           url: "",
                           color: const Color(0xFFFFDAEB),
                           imgUrl: "assets/pay.png",
@@ -64,7 +64,7 @@ class MainPage extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         _Grid_View(
-                          context:  context,
+                          context: context,
                           url: "",
                           color: const Color(0xFFFDF1A9),
                           imgUrl: "assets/shop.png",
@@ -89,13 +89,12 @@ class MainPage extends StatelessWidget {
     );
   }
 
-  InkWell _Grid_View({
-    required String url,
-    required Color color,
-    required String imgUrl,
-    required String title,
-    required BuildContext context
-  }) {
+  InkWell _Grid_View(
+      {required String url,
+      required Color color,
+      required String imgUrl,
+      required String title,
+      required BuildContext context}) {
     return InkWell(
       onTap: () {
         if (url != "") {

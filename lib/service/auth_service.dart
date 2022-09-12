@@ -6,18 +6,18 @@ import 'package:bazarapp/views/report_detail_page.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
+/// Authentification service to login
 class AuthService {
-  String url = 'http://cashapp.kamtar.uz/api/token/';
-  bool isAuthenticated = false;
-
-  AuthService();
+  static String url = "http://cashapp.kamtar.uz/";
 
   Future<bool> login(String username, String password) async {
+    bool isAuthenticated = false;
+
     final prefs = await SharedPreferences.getInstance();
 
     try {
       final response = await http.post(
-        Uri.parse(url),
+        Uri.parse("${url}api/token"),
         body: {"username": username, "password": password},
       );
 
@@ -39,10 +39,9 @@ class AuthService {
   void getReportType() async {
     late List<ReportModel> _list = [];
 
-    const url = 'http://cashapp.kamtar.uz/api/101/reports';
     try {
       final response = await http.get(
-        Uri.parse(url),
+        Uri.parse("${url}api/101/reports"),
       );
       Iterable list = json.decode(response.body);
       _list = list.map((model) => ReportModel.fromJson(model)).toList();
@@ -61,10 +60,9 @@ class AuthService {
     late ReportDataSource reportDataSource;
     String _searchValue = "";
 
-    String url = 'http://cashapp.kamtar.uz/api/101/reports/\${widget.code}';
     try {
       final response = await http.get(
-        Uri.parse(url),
+        Uri.parse("${url}api/101/reports/"),
       );
       Iterable list = jsonDecode(utf8.decode(response.bodyBytes));
       _list = list.map((model) => ReportDetailModel.fromJson(model)).toList();

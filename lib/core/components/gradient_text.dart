@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
 
-// ignore: must_be_immutable
+/// Generates gradient-text-widget
+///
+/// wraps given text with [ShaderMask] and
+/// makes it colorful with [green,orange,red]
 class GradientText extends StatelessWidget {
-  TextStyle? textStyle;
-  String? text;
-  GradientText({
+  /// Style for given gradient-text
+  final TextStyle? textStyle;
+
+  /// Text for gradient-text
+  final String? text;
+
+  const GradientText({
     Key? key,
     this.textStyle,
     this.text,
