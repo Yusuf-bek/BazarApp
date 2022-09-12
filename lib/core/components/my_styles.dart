@@ -43,6 +43,4 @@ class ReportPageStyles extends MyTextStyles {
     fontSize: 18,
     fontWeight: FontWeight.bold,
   );
-
 }
-

@@ -4,14 +4,14 @@ import 'package:flutter/material.dart';
 ///
 /// wraps given text with [ShaderMask] and
 /// makes it colorful with [green,orange,red]
+
 class GradientText extends StatelessWidget {
   /// Style for given gradient-text
   final TextStyle? textStyle;
-
   /// Text for gradient-text
   final String? text;
 
-  const GradientText({
+ const  GradientText({
     Key? key,
     this.textStyle,
     this.text,
