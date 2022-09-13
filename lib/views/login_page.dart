@@ -2,6 +2,7 @@ import 'package:bazarapp/core/components/my_styles.dart';
 import 'package:bazarapp/core/extensions/buildcontext_extension.dart';
 import 'package:bazarapp/core/components/size_config.dart';
 import 'package:bazarapp/providers/hide_unhide_password_provider.dart';
+import 'package:bazarapp/service/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -14,10 +15,10 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final TextEditingController _loginController = TextEditingController();
+  final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _parolController = TextEditingController();
 
-  final _loginFormKey = GlobalKey<FormState>();
+  final _usernameFormKey = GlobalKey<FormState>();
   final _parolFormKey = GlobalKey<FormState>();
 
   @override
@@ -57,37 +58,86 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 SizedBox(
                   width: context.width,
-                  height: context.height * 0.35,
+                  height: context.height * 0.3,
                   child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const Icon(
-                              Icons.account_circle_outlined,
-                              color: Colors.grey,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        // mainAxisSize: MainAxisSize.min,
+                        children: [
+                          SizedBox(
+                            width: context.width * 0.7,
+                            height: context.height * 0.1,
+                            child: Form(
+                              key: _usernameFormKey,
+                              child: TextFormField(
+                                validator: (value) {
+                                  if (value!.length < 5) {
+                                    return "Login kiritilmagan yoki qisqa";
+                                  }
+                                  return null;
+                                },
+                                controller: _usernameController,
+                                decoration: InputDecoration(
+                                  prefixIcon: const Icon(
+                                    Icons.account_circle_outlined,
+                                    color: Colors.grey,
+                                  ),
+                                  hintText: "login",
+                                  hintStyle:
+                                      LoginPageStyles.instance.myHintTextStyle,
+                                  border: const OutlineInputBorder(
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(14),
+                                    ),
+                                  ),
+                                ),
+                                keyboardType: TextInputType.name,
+                              ),
                             ),
-                            const SizedBox(
-                              width: 15,
-                            ),
-                            SizedBox(
+                          ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Consumer<HidePasswordProvider>(
+                              builder: (context, hidePasswordProvider, child) {
+                            return SizedBox(
                               width: context.width * 0.7,
                               height: context.height * 0.1,
                               child: Form(
-                                key: _loginFormKey,
+                                key: _parolFormKey,
                                 child: TextFormField(
                                   validator: (value) {
-                                    if (value!.length < 5) {
-                                      return "Login kiritilmagan yoki qisqa";
+                                    if (value!.length < 3) {
+                                      return "Parol qisqa";
                                     }
-                                    return null;
                                   },
-                                  controller: _loginController,
+                                  controller: _parolController,
                                   decoration: InputDecoration(
-                                    hintText: "login",
+                                    prefixIcon: const Icon(
+                                      Icons.lock_outline_rounded,
+                                      color: Colors.grey,
+                                    ),
+                                    suffixIcon: IconButton(
+                                      splashColor: Colors.transparent,
+                                      focusColor: Colors.transparent,
+                                      hoverColor: Colors.transparent,
+                                      highlightColor: Colors.transparent,
+                                      onPressed: () {
+                                        hidePasswordProvider.changeVisibility();
+                                      },
+                                      icon: Icon(
+                                        hidePasswordProvider.isVisible
+                                            ? Icons.visibility
+                                            : Icons.visibility_off,
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                                    hintText: "parol",
                                     hintStyle: LoginPageStyles
                                         .instance.myHintTextStyle,
                                     border: const OutlineInputBorder(
@@ -96,89 +146,42 @@ class _LoginPageState extends State<LoginPage> {
                                       ),
                                     ),
                                   ),
-                                  keyboardType: TextInputType.name,
+                                  keyboardType: TextInputType.visiblePassword,
+                                  obscureText: hidePasswordProvider.isVisible,
+                                  onChanged: (val) {},
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Icon(
-                              Icons.lock_outline_rounded,
-                              color: Colors.grey,
-                            ),
-                            const SizedBox(
-                              width: 15,
-                            ),
-                            Consumer<HidePasswordProvider>(builder:
-                                (context, hidePasswordProvider, child) {
-                              return SizedBox(
-                                width: context.width * 0.7,
-                                height: context.height * 0.1,
-                                child: Form(
-                                  key: _parolFormKey,
-                                  child: TextFormField(
-                                    validator: (value) {
-                                      if (value!.length < 5) {
-                                        return "Parol qisqa";
-                                      }
-                                    },
-                                    controller: _parolController,
-                                    decoration: InputDecoration(
-                                      suffixIcon: IconButton(
-                                        splashColor: Colors.transparent,
-                                        focusColor: Colors.transparent,
-                                        hoverColor: Colors.transparent,
-                                        highlightColor: Colors.transparent,
-                                        onPressed: () {
-                                          hidePasswordProvider
-                                              .changeVisibility();
-                                        },
-                                        icon: Icon(
-                                          hidePasswordProvider.isVisible
-                                              ? Icons.visibility
-                                              : Icons.visibility_off,
-                                          color: Colors.grey,
-                                        ),
-                                      ),
-                                      hintText: "parol",
-                                      hintStyle: LoginPageStyles
-                                          .instance.myHintTextStyle,
-                                      border: const OutlineInputBorder(
-                                        borderRadius: BorderRadius.all(
-                                          Radius.circular(14),
-                                        ),
-                                      ),
-                                    ),
-                                    keyboardType: TextInputType.visiblePassword,
-                                    obscureText: hidePasswordProvider.isVisible,
-                                    onChanged: (val) {},
-                                  ),
-                                ),
-                              );
-                            })
-                          ],
-                        ),
-                      ]),
-                ),
-                loginButton(context, onTap: () {
-                  if (_loginFormKey.currentState!.validate() &&
-                      _parolFormKey.currentState!.validate()) {
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        backgroundColor: Colors.red,
-                        content: Text('Sike thats the wrong number'),
+                            );
+                          })
+                        ],
                       ),
-                    );
-                  }
-                  if (3 == 2) {
-                    _loginController.dispose();
-                    _parolController.dispose();
-                  }
-                }),
+                    ],
+                  ),
+                ),
+                loginButton(
+                    context: context,
+                    onTap: () async {
+                      if (_usernameFormKey.currentState!.validate() &&
+                          _parolFormKey.currentState!.validate()) {
+                        AuthService.login(
+                          password: "123",
+                          username: "admin",
+                          onLoggedIn: (() {
+                            _usernameController.dispose();
+                            _parolController.dispose();
+                            Navigator.pushReplacementNamed(
+                                context, "main-page");
+                          }),
+                        );
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            backgroundColor: Colors.red,
+                            content: Text('Sike thats the wrong number'),
+                          ),
+                        );
+                      }
+                    }),
               ],
             ),
           ),
@@ -187,7 +190,8 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  InkWell loginButton(BuildContext context, {required Function() onTap}) {
+  InkWell loginButton(
+      {required BuildContext context, required Function() onTap}) {
     return InkWell(
       onTap: onTap,
       child: Container(

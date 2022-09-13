@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:bazarapp/model/report_detail_model.dart';
 import 'package:bazarapp/model/report_model.dart';
 import 'package:bazarapp/views/report_detail_page.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -10,15 +11,20 @@ import 'package:shared_preferences/shared_preferences.dart';
 class AuthService {
   static String url = "http://cashapp.kamtar.uz/";
 
-  Future<bool> login(String username, String password) async {
-    bool isAuthenticated = false;
-
+  static Future<void> login({
+    required String username,
+    required String password,
+    required VoidCallback onLoggedIn,
+  }) async {
     final prefs = await SharedPreferences.getInstance();
 
     try {
       final response = await http.post(
         Uri.parse("${url}api/token"),
-        body: {"username": username, "password": password},
+        body: {
+          "username": username,
+          "password": password,
+        },
       );
 
       if (response.statusCode != 200) {
@@ -27,10 +33,9 @@ class AuthService {
         var resBody = json.decode(response.body);
         prefs.setString("access", resBody["access"]);
         prefs.setString("refresh", resBody["refresh"]);
-        isAuthenticated = true;
-      }
 
-      return isAuthenticated;
+        onLoggedIn.call();
+      }
     } catch (error) {
       rethrow;
     }
