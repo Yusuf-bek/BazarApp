@@ -166,6 +166,14 @@ class _LoginPageState extends State<LoginPage> {
                         AuthService.login(
                           password: "123",
                           username: "admin",
+                          onUsernameOrPasswordWrong: () {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                backgroundColor: Color(0xFFF44336),
+                                content: Text('Username or Password worng'),
+                              ),
+                            );
+                          },
                           onLoggedIn: (() {
                             _usernameController.dispose();
                             _parolController.dispose();
@@ -177,7 +185,7 @@ class _LoginPageState extends State<LoginPage> {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
                             backgroundColor: Colors.red,
-                            content: Text('Sike thats the wrong number'),
+                            content: Text("Username yoki password da xatolik"),
                           ),
                         );
                       }

@@ -11,11 +11,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 class AuthService {
   static String url = "http://cashapp.kamtar.uz/";
 
-  static Future<void> login({
-    required String username,
-    required String password,
-    required VoidCallback onLoggedIn,
-  }) async {
+  static Future<void> login(
+      {required String username,
+      required String password,
+      required VoidCallback onLoggedIn,
+      required VoidCallback onUsernameOrPasswordWrong}) async {
     final prefs = await SharedPreferences.getInstance();
 
     try {
@@ -27,10 +27,11 @@ class AuthService {
         },
       );
 
-      if (response.statusCode != 200) {
-        throw HttpException;
+      if (response.statusCode == 401) {
+        onUsernameOrPasswordWrong.call();
       } else {
         var resBody = json.decode(response.body);
+        print(resBody["access"]);
         prefs.setString("access", resBody["access"]);
         prefs.setString("refresh", resBody["refresh"]);
 
